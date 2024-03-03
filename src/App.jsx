@@ -11,6 +11,7 @@ import Homepage from "./pages/Homepage";
 import Explore from "./pages/Explore";
 import { useEffect, useState } from "react";
 import Piechar from "./pages/piechar";
+// import "bootstrap/dist/css/bootstrap.css"
 
 function App() {
   const [token, setToken] = useState();
@@ -22,7 +23,7 @@ function App() {
       <nav className="">
         <Navbar />
       </nav>
-      <main>
+      <main className="bg-gray-300">
         <Router>
           <Routes>
             {token ? (

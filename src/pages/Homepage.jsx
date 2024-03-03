@@ -4,24 +4,29 @@ import { useNavigate } from "react-router-dom";
 import { API_END_POINT } from "../configs/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
-import { async } from "q";
 
 const Homepage = () => {
   const [token, setToken] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedCategoryProducts, setSelectedCategoryProducts] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [tempProductList, setTempProductList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 6;
+  const lastIndex = currentPage * productsPerPage;
+  const firstIndex = lastIndex - productsPerPage;
+  const npage = Math.ceil(products.length / productsPerPage);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getProducts = async () => {
       try {
         const response = await axios.get(`${API_END_POINT}/products`);
-        const response2 = await axios.get(`${API_END_POINT}/products/categories`);
-        if (response && response.data.products && response2 ) {
+        const response2 = await axios.get(
+          `${API_END_POINT}/products/categories`
+        );
+        if (response && response.data.products && response2) {
           const categoryNames = response2.data;
           console.log(categoryNames);
           const uniqueCategories = [...new Set(categoryNames)];
@@ -64,19 +69,41 @@ const Homepage = () => {
   };
 
   // Function to handle category selection
-  const handleCategoryClick = async(category) => {
-    const response3 = await axios.get(`${API_END_POINT}/products/category/${category}`)
+  const handleCategoryClick = async (category) => {
+    const response3 = await axios.get(
+      `${API_END_POINT}/products/category/${category}`
+    );
     console.log(response3.data);
     setSelectedCategory(category);
-    setSelectedCategoryProducts(response3.data.products);
+    setProducts(response3.data.products);
   };
 
   // Filter products based on selected category
-  const filteredProducts = selectedCategory
-    ? selectedCategoryProducts
-    : products;
+  // const filteredProducts = selectedCategory
+  //   ? selectedCategoryProducts
+  //   : products;
 
-    console.log(filteredProducts);
+  // console.log(filteredProducts);
+
+  const items = products.slice(firstIndex, lastIndex);
+  const numbers = [...Array(npage + 1).keys()].slice(1);
+
+  console.log(numbers);
+
+  const prePage = () => {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const nextPage = () => {
+    if (currentPage !== npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const changeCPage = (id) => {
+    setCurrentPage(id);
+  };
+
   return (
     <div>
       <div className="flex flex-row">
@@ -109,20 +136,26 @@ const Homepage = () => {
             type="text"
             name="search"
             placeholder="Search Books..."
-            style={{ margin: "30px", padding: "5px", width: "50%", border: "2px solid black" }}
+            style={{
+              margin: "30px",
+              padding: "5px",
+              width: "50%",
+              border: "2px solid black",
+            }}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <div className="grid grid-cols-3 gap-4">
-            {filteredProducts.map((product) => (
+            {items.map((product) => (
               <div
-              onClick={() =>
-                navigate("/explore", {
-                  state: {
-                    product,
-                  },
-                })
-              }
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  navigate("/explore", {
+                    state: {
+                      product,
+                    },
+                  })
+                }
                 key={product.id}
                 className="flex flex-col items-center justify-center"
               >
@@ -136,6 +169,69 @@ const Homepage = () => {
                 <p className="text-center">${product.price}</p>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
+            <div
+              className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+              aria-label="Pagination"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <a
+                onClick={prePage}
+                href="#"
+                className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+              >
+                <span className="sr-only">Previous</span>
+                <svg
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+              {numbers.map((n, i) => (
+                <div
+                  className={`page-item ${currentPage === n ? "active" : ""}`}
+                  key={i}
+                >
+                  <a
+                    href="#"
+                    onClick={() => changeCPage(n)}
+                    aria-current="page"
+                    className={`${currentPage === n? 'relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600':'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}`}
+                  >
+                    {n}
+                  </a>
+                </div>
+              ))}
+              <a
+                onClick={nextPage}
+                href="#"
+                className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+              >
+                <span className="sr-only">Next</span>
+                <svg
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
