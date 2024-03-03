@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
 import Explore from "./pages/Explore";
 import { useEffect, useState } from "react";
+import Piechar from "./pages/piechar";
 
 function App() {
   const [token, setToken] = useState();
@@ -31,6 +32,7 @@ function App() {
             )}
             <Route path="/login" element={<Login />} />
             <Route path="/explore" element={<Explore />} />
+            <Route path="/piechart" element={<Piechar />} />
           </Routes>
         </Router>
       </main>

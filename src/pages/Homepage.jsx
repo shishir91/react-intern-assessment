@@ -9,6 +9,7 @@ const Homepage = () => {
   const [token, setToken] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,12 +35,21 @@ const Homepage = () => {
     };
     getProducts();
   }, []);
-  console.log(products);
 
   // Function to capitalize the first letter of each word
   const capitalizeFirstLetter = (str) => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
+
+  // Function to handle category selection
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
+
+  // Filter products based on selected category
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory.toLowerCase())
+    : products;
 
   return (
     <div>
@@ -50,7 +60,14 @@ const Homepage = () => {
           </h1>
           <ul>
             {categories.map((category, index) => (
-              <li key={index}>{category}</li>
+              <li 
+              style={{cursor: "pointer"}}
+                key={index}
+                onClick={() => handleCategoryClick(category.toLowerCase())}
+                className={selectedCategory === category.toLowerCase() ? "selected" : ""}
+              >
+                {category}
+              </li>
             ))}
           </ul>
         </div>
@@ -60,79 +77,15 @@ const Homepage = () => {
               Products
             </h1>
           </center>
-          <div className="container">
-            <div className="row">
-              {products.length > 0 ? (
-                products
-                  .sort((a, b) => b.id - a.id)
-                  .map((product, index) => {
-                    return (
-                      <>
-                        <div key={index} className="col-md-3 mb-3">
-                          <div
-                            onClick={() =>
-                              navigate("/explore", {
-                                state: {
-                                  product,
-                                },
-                              })
-                            }
-                            style={{ cursor: "pointer" }}
-                          >
-                            <div
-                              className="card"
-                              style={{
-                                border: "none",
-                                margin: "0.4rem",
-                                boxShadow:
-                                  " rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
-                              }}
-                            >
-                              <img
-                                src={product.thumbnail}
-                                className="card-img-top"
-                                alt={product.title}
-                                style={{
-                                  height: "10rem",
-                                  width: "fit-content",
-                                }}
-                              />
-                              <div className="card-body">
-                                <h5
-                                  style={{ fontWeight: "bold" }}
-                                  className="card-title"
-                                >
-                                  {product.title}
-                                </h5>
-                                <p className="card-text">
-                                  Brand: {product.brand}
-                                </p>
-                                <p className="card-text">
-                                  Rating: {product.rating}/5
-                                </p>
-                                <b>
-                                  <p
-                                    style={{ fontWeight: "bold" }}
-                                    className="card-text"
-                                  >
-                                    $ {product.price}
-                                  </p>
-                                </b>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })
-              ) : (
-                <div>
-                  <center>
-                    <h5 className="fw-bold">No Product Found</h5>
-                  </center>
-                </div>
-              )}
-            </div>
+          <div className="grid grid-cols-3 gap-4">
+            {filteredProducts.map((product) => (
+              <div key={product.id} className="flex flex-col items-center justify-center">
+                <img src={product.thumbnail} alt={product.title} className="w-64 h-64" />
+                <h4 className="mt-2 text-center">{product.title}</h4>
+                <p className="text-center">{product.brand}</p>
+                <p className="text-center">${product.price}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
