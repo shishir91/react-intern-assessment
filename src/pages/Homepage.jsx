@@ -105,7 +105,7 @@ const Homepage = () => {
   };
 
   return (
-    <div>
+    <div className="bg-gray-300">
       <div className="flex flex-row">
         <div className="basis-1/4 m-5">
           <h1 className="font-bold text-2xl font-semibold tracking-widest rounded-lg">
@@ -157,7 +157,7 @@ const Homepage = () => {
                   })
                 }
                 key={product.id}
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center shadow-xl"
               >
                 <img
                   src={product.thumbnail}

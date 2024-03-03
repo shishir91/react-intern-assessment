@@ -8,16 +8,11 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [token, setToken] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-    // if (token) {
-    //     console.log(token);
-    //   navigate("/");
-    // }
-  }, []);
+  if (localStorage.getItem("login")) {
+    navigate("/");
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +24,8 @@ const Login = () => {
       const { email, token } = response.data;
       console.log(response);
       setEmail(email);
-      localStorage.setItem("token", token);
+      localStorage.setItem("login", true);
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
     }

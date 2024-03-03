@@ -14,19 +14,15 @@ import Piechar from "./pages/piechar";
 // import "bootstrap/dist/css/bootstrap.css"
 
 function App() {
-  const [token, setToken] = useState();
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
   return (
     <div>
-      <nav className="">
-        <Navbar />
-      </nav>
-      <main className="bg-gray-300">
-        <Router>
+      <Router>
+        <nav className="">
+          <Navbar />
+        </nav>
+        <main style={{ height: "100vh" }} className="bg-gray-300">
           <Routes>
-            {token ? (
+            {localStorage.getItem("login") ? (
               <Route index element={<Homepage />} />
             ) : (
               <Route index element={<Login />} />
@@ -35,8 +31,8 @@ function App() {
             <Route path="/explore" element={<Explore />} />
             <Route path="/piechart" element={<Piechar />} />
           </Routes>
-        </Router>
-      </main>
+        </main>
+      </Router>
     </div>
   );
 }

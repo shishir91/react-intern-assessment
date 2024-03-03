@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Explore = () => {
   const location = useLocation();
-  const product = location.state.product;
+  const navigate = useNavigate();
   const [fullscreenImage, setFullscreenImage] = useState(null);
+  console.log(location);
+  if (!location.state || !location.state.product) {
+    navigate("/");
+    return;
+  }
+  const product = location.state.product;
 
   const handleImageClick = (image) => {
     setFullscreenImage(image);
@@ -41,9 +47,14 @@ const Explore = () => {
             </div>
           </div>
           <div>
+            <p className="text-lg font-semibold mb-2">
+              Price: ${product.price}
+            </p>
+            <p className="text-lg font-semibold mb-2">
+              Discount: {product.discountPercentage}%
+            </p>
             <p className="text-gray-600 mb-4">{product.description}</p>
-            <p className="text-lg font-semibold mb-2">Price: ${product.price}</p>
-            <p className="text-sm text-gray-500">Rating: {product.rating}</p>
+            <p className="text-sm text-gray-500">Rating: {product.rating}/5</p>
             <p className="text-sm text-gray-500">Brand: {product.brand}</p>
             <p className="text-sm text-gray-500">Stock: {product.stock}</p>
           </div>
@@ -58,7 +69,11 @@ const Explore = () => {
             >
               &#10006;
             </button>
-            <img src={fullscreenImage} alt="Full-Screen" className="max-h-screen" />
+            <img
+              src={fullscreenImage}
+              alt="Full-Screen"
+              className="max-h-screen"
+            />
           </div>
         </div>
       )}

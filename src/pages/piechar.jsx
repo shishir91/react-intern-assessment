@@ -75,7 +75,7 @@ const PieChart = () => {
   }, [categoriesData]); // Trigger the effect when categoriesData changes
 
   return (
-    <div style={{ height: '33rem', paddingBottom: '4rem', textAlign: 'center', display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
+    <div style={{ height: '33rem', paddingBottom: '4rem', textAlign: 'center', display: 'flex', alignContent: 'center', justifyContent: 'center',  }}>
       <div className="shadow-lg rounded-lg overflow-hidden">
         <div className="py-3 px-5 bg-gray-50">Pie chart</div>
         <canvas style={{ padding: '1rem', marginLeft: '4rem', marginRight: '4rem', display: 'block', boxSizing: 'border-box', height: '423px', width: '423px' }} id="chartPie" width="423px" height="423px"></canvas>
