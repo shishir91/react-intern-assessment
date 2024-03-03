@@ -67,8 +67,8 @@ const Homepage = () => {
                   .sort((a, b) => b.id - a.id)
                   .map((product, index) => {
                     return (
-                      <div key={index} className="col-md-3 mb-1">
-                        <div className="card" style={{ width: "15rem" }}>
+                      <div key={index} className="col-md-4 mb-1">
+                        <div className="card" style={{ width: "14rem" }}>
                           <img
                             src={product.thumbnail}
                             className="card-img-top h-64 w-64"
