@@ -69,7 +69,16 @@ const Homepage = () => {
                     return (
                       <>
                         <div key={index} className="col-md-3 mb-3">
-                          <div style={{ cursor: "pointer" }}>
+                          <div
+                            onClick={() =>
+                              navigate("/explore", {
+                                state: {
+                                  product,
+                                },
+                              })
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
                             <div
                               className="card"
                               style={{
