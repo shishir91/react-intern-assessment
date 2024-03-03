@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
+import Explore from "./pages/Explore";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
               <Route index element={<Login />} />
             )}
             <Route path="/login" element={<Login />} />
+            <Route path="/explore" element={<Explore />} />
           </Routes>
         </Router>
       </main>

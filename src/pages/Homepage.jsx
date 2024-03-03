@@ -81,6 +81,59 @@ const Homepage = () => {
                             <p className="card-text">Brand: {product.brand}</p>
                             <p className="card-text">Rating: {product.rating}/5</p>
                             {/* Add any other details you want to display */}
+                      <>
+                        <div key={index} className="col-md-3 mb-3">
+                          <div
+                            onClick={() =>
+                              navigate("/explore", {
+                                state: {
+                                  product,
+                                },
+                              })
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
+                            <div
+                              className="card"
+                              style={{
+                                border: "none",
+                                margin: "0.4rem",
+                                boxShadow:
+                                  " rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
+                              }}
+                            >
+                              <img
+                                src={product.thumbnail}
+                                className="card-img-top"
+                                alt={product.title}
+                                style={{
+                                  height: "10rem",
+                                  width: "fit-content",
+                                }}
+                              />
+                              <div className="card-body">
+                                <h5
+                                  style={{ fontWeight: "bold" }}
+                                  className="card-title"
+                                >
+                                  {product.title}
+                                </h5>
+                                <p className="card-text">
+                                  Brand: {product.brand}
+                                </p>
+                                <p className="card-text">
+                                  Rating: {product.rating}/5
+                                </p>
+                                <b>
+                                  <p
+                                    style={{ fontWeight: "bold" }}
+                                    className="card-text"
+                                  >
+                                    $ {product.price}
+                                  </p>
+                                </b>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
