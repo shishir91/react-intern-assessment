@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_END_POINT } from "../configs/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList } from '@fortawesome/free-solid-svg-icons'
+import { faList } from "@fortawesome/free-solid-svg-icons";
 
 const Homepage = () => {
   const [token, setToken] = useState(null);
@@ -16,12 +16,15 @@ const Homepage = () => {
       try {
         const response = await axios.get(`${API_END_POINT}/products`);
         if (response && response.data.products) {
-          const categoryNames = response.data.products.map((product) => product.category);
-          // Remove duplicates from the category names
+          const categoryNames = response.data.products.map(
+            (product) => product.category
+          );
           const uniqueCategories = [...new Set(categoryNames)];
-          // Capitalize the first letter of each word in the category names
-          const capitalizedCategories = uniqueCategories.map(capitalizeFirstLetter);
+          const capitalizedCategories = uniqueCategories.map(
+            capitalizeFirstLetter
+          );
           setCategories(capitalizedCategories);
+          setProducts(response.data.products);
         } else {
           console.log("Cannot get response");
         }
@@ -31,6 +34,7 @@ const Homepage = () => {
     };
     getProducts();
   }, []);
+  console.log(products);
 
   // Function to capitalize the first letter of each word
   const capitalizeFirstLetter = (str) => {
@@ -56,12 +60,71 @@ const Homepage = () => {
               Products
             </h1>
           </center>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam
-            laboriosam voluptate molestias inventore aut nisi vero vitae
-            voluptatum eveniet maxime omnis, est amet, magni impedit asperiores
-            sunt dolore voluptatibus ullam?
-          </p>
+          <div className="container">
+            <div className="row">
+              {products.length > 0 ? (
+                products
+                  .sort((a, b) => b.id - a.id)
+                  .map((product, index) => {
+                    return (
+                      <>
+                        <div key={index} className="col-md-3 mb-3">
+                          <div style={{ cursor: "pointer" }}>
+                            <div
+                              className="card"
+                              style={{
+                                border: "none",
+                                margin: "0.4rem",
+                                boxShadow:
+                                  " rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
+                              }}
+                            >
+                              <img
+                                src={product.thumbnail}
+                                className="card-img-top"
+                                alt={product.title}
+                                style={{
+                                  height: "10rem",
+                                  width: "fit-content",
+                                }}
+                              />
+                              <div className="card-body">
+                                <h5
+                                  style={{ fontWeight: "bold" }}
+                                  className="card-title"
+                                >
+                                  {product.title}
+                                </h5>
+                                <p className="card-text">
+                                  Brand: {product.brand}
+                                </p>
+                                <p className="card-text">
+                                  Rating: {product.rating}/5
+                                </p>
+                                <b>
+                                  <p
+                                    style={{ fontWeight: "bold" }}
+                                    className="card-text"
+                                  >
+                                    $ {product.price}
+                                  </p>
+                                </b>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })
+              ) : (
+                <div>
+                  <center>
+                    <h5 className="fw-bold">No Product Found</h5>
+                  </center>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
