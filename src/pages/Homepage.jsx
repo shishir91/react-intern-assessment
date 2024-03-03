@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { API_END_POINT } from "../configs/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from '@fortawesome/free-solid-svg-icons'
+import Image1 from './images/product.jpg'
 
 const Homepage = () => {
   const [token, setToken] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +24,7 @@ const Homepage = () => {
           // Capitalize the first letter of each word in the category names
           const capitalizedCategories = uniqueCategories.map(capitalizeFirstLetter);
           setCategories(capitalizedCategories);
+          setProducts(response.data.products);
         } else {
           console.log("Cannot get response");
         }
@@ -37,6 +40,16 @@ const Homepage = () => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
+  // Function to handle category selection
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
+
+  // Filter products based on selected category
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
   return (
     <div>
       <div className="flex flex-row">
@@ -46,7 +59,7 @@ const Homepage = () => {
           </h1>
           <ul>
             {categories.map((category, index) => (
-              <li key={index}>{category}</li>
+              <li key={index} onClick={() => handleCategorySelect(category)} style={{ cursor: 'pointer' }}>{category}</li>
             ))}
           </ul>
         </div>
@@ -56,12 +69,23 @@ const Homepage = () => {
               Products
             </h1>
           </center>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam
-            laboriosam voluptate molestias inventore aut nisi vero vitae
-            voluptatum eveniet maxime omnis, est amet, magni impedit asperiores
-            sunt dolore voluptatibus ullam?
-          </p>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="">
+              <img src={Image1} alt="Product 1" className="w-64 h-64" />
+              <h4 className="mt-2 text-center">Product 1</h4>
+            </div>
+            <div className="text-center">
+              <img src={Image1} alt="Product 2" className="w-64 h-64" />
+              <h4 className="mt-2 text-center">Product 2</h4>
+            </div>
+            <div className="text-center">
+              <img src={Image1} alt="Product 3" className="w-64 h-64" />
+              <h4 className="mt-2 text-center">Product 3</h4>
+            </div>
+            {/* Repeat this structure for more products */}
+          </div>
+
+
         </div>
       </div>
     </div>
