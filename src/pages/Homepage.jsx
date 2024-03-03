@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_END_POINT } from "../configs/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faList } from '@fortawesome/free-solid-svg-icons'
 
 const Homepage = () => {
   const [token, setToken] = useState();
@@ -36,7 +37,7 @@ const Homepage = () => {
       <div className="flex flex-row">
         <div class="basis-1/4 m-5">
           <h1 className="font-bold text-2xl font-semibold tracking-widest rounded-lg">
-            Catagories
+          <FontAwesomeIcon icon={faList} /> Catagories
           </h1>
         </div>
         <div class="basis-3/4 m-5">
