@@ -1,143 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const Explore = () => {
   const location = useLocation();
   const product = location.state.product;
-  console.log(product);
-  return (
-    <div>
-      <div
-        style={{
-          marginTop: "20px",
-          marginLeft: "20px",
-          boxShadow: "0px 0px 5px #ccc",
-          padding: "10px",
-          display: "flex",
-          flexDirection: "column",
-          cursor: "pointer",
-        }}
-      >
-        <div
-          id="default-carousel"
-          className="relative w-full"
-          data-carousel="slide"
-        >
-          <div className="relative h-50 overflow-hidden rounded-lg md:h-92">
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="https://cdn.dummyjson.com/product-images/30/thumbnail.jpg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..."/>
+  const [fullscreenImage, setFullscreenImage] = useState(null);
 
-              {/* {product.images.map((image, index) => {
-                return (
-                  <>
-                    <div key={index}>
-                      <img
-                        src={image}
-                        className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                        alt="..."
-                      />
-                    </div>
-                  </>
-                );
-              })} */}
+  const handleImageClick = (image) => {
+    setFullscreenImage(image);
+  };
+
+  const handleCloseFullscreen = () => {
+    setFullscreenImage(null);
+  };
+
+  return (
+    <div className="container mx-auto py-8">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl font-semibold mb-4">{product.title}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="mb-8">
+            <div className="mb-4">
+              <img
+                src={product.thumbnail}
+                alt={product.title}
+                className="w-full cursor-pointer"
+                onClick={() => handleImageClick(product.thumbnail)}
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              {product.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Product ${index + 1}`}
+                  className="w-full cursor-pointer"
+                  onClick={() => handleImageClick(image)}
+                />
+              ))}
             </div>
           </div>
-          <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="true"
-              aria-label="Slide 1"
-              data-carousel-slide-to="0"
-            ></button>
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 2"
-              data-carousel-slide-to="1"
-            ></button>
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 3"
-              data-carousel-slide-to="2"
-            ></button>
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 4"
-              data-carousel-slide-to="3"
-            ></button>
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 5"
-              data-carousel-slide-to="4"
-            ></button>
+          <div>
+            <p className="text-gray-600 mb-4">{product.description}</p>
+            <p className="text-lg font-semibold mb-2">Price: ${product.price}</p>
+            <p className="text-sm text-gray-500">Rating: {product.rating}</p>
+            <p className="text-sm text-gray-500">Brand: {product.brand}</p>
+            <p className="text-sm text-gray-500">Stock: {product.stock}</p>
           </div>
-          <button
-            type="button"
-            className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-            data-carousel-prev
-          >
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-              <svg
-                className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 1 1 5l4 4"
-                />
-              </svg>
-              <span className="sr-only">Previous</span>
-            </span>
-          </button>
-          <button
-            type="button"
-            className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-            data-carousel-next
-          >
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-              <svg
-                className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 9 4-4-4-4"
-                />
-              </svg>
-              <span className="sr-only">Next</span>
-            </span>
-          </button>
         </div>
-        <br />
-        <h3 className="font-bold text-2xl font-semibold tracking-widest rounded-lg">{product.title}</h3>
-         
-        <span><b>Brand</b>: {product.brand}</span>
-        <span><b>Price: </b>${product.price}</span>
-        <span><b>Discount: </b>{product.discountPercentage}%</span>
-        <span><b>Rating: </b>{product.rating}/5</span>
-        <span><b>Description: </b>{product.description}</span>
-        <br />
       </div>
+      {fullscreenImage && (
+        <div className="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-90 flex justify-center items-center">
+          <div className="relative">
+            <button
+              className="absolute top-2 right-2 text-white text-xl focus:outline-none"
+              onClick={handleCloseFullscreen}
+            >
+              &#10006;
+            </button>
+            <img src={fullscreenImage} alt="Full-Screen" className="max-h-screen" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
