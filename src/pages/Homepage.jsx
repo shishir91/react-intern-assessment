@@ -67,57 +67,27 @@ const Homepage = () => {
                   .sort((a, b) => b.id - a.id)
                   .map((product, index) => {
                     return (
-                      <>
-                        <div key={index} className="col-md-3 mb-3">
-                          <div style={{ cursor: "pointer" }}>
-                            <div
-                              className="card"
-                              style={{
-                                border: "none",
-                                margin: "0.4rem",
-                                boxShadow:
-                                  " rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
-                              }}
-                            >
-                              <img
-                                src={product.thumbnail}
-                                className="card-img-top"
-                                alt={product.title}
-                                style={{
-                                  height: "10rem",
-                                  width: "fit-content",
-                                }}
-                              />
-                              <div className="card-body">
-                                <h5
-                                  style={{ fontWeight: "bold" }}
-                                  className="card-title"
-                                >
-                                  {product.title}
-                                </h5>
-                                <p className="card-text">
-                                  Brand: {product.brand}
-                                </p>
-                                <p className="card-text">
-                                  Rating: {product.rating}/5
-                                </p>
-                                <b>
-                                  <p
-                                    style={{ fontWeight: "bold" }}
-                                    className="card-text"
-                                  >
-                                    $ {product.price}
-                                  </p>
-                                </b>
-                              </div>
-                            </div>
+                      <div key={index} className="col-md-3 mb-1">
+                        <div className="card" style={{ width: "15rem" }}>
+                          <img
+                            src={product.thumbnail}
+                            className="card-img-top h-64 w-64"
+                            alt={product.title}
+                          />
+                          <div className="card-body">
+                            <h5 className="card-title">{product.title}</h5>
+                            <p className="card-text">{product.description}</p>
+                            <p className="card-text">Price: ${product.price}</p>
+                            <p className="card-text">Brand: {product.brand}</p>
+                            <p className="card-text">Rating: {product.rating}/5</p>
+                            {/* Add any other details you want to display */}
                           </div>
                         </div>
-                      </>
+                      </div>
                     );
                   })
               ) : (
-                <div>
+                <div className="col">
                   <center>
                     <h5 className="fw-bold">No Product Found</h5>
                   </center>
@@ -125,6 +95,10 @@ const Homepage = () => {
               )}
             </div>
           </div>
+
+
+
+
         </div>
       </div>
     </div>
