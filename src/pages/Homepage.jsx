@@ -116,6 +116,13 @@ const Homepage = () => {
           <div className="grid grid-cols-3 gap-4">
             {filteredProducts.map((product) => (
               <div
+              onClick={() =>
+                navigate("/explore", {
+                  state: {
+                    product,
+                  },
+                })
+              }
                 key={product.id}
                 className="flex flex-col items-center justify-center"
               >
