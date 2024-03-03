@@ -1,47 +1,51 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto';
 
-const piechar = () => {
-    useEffect(() => {
-        // Data for the pie chart
-        const dataPie = {
-          labels: ["JavaScript", "Python", "Ruby"],
-          datasets: [
-            {
-              label: "My First Dataset",
-              data: [300, 50, 100],
-              backgroundColor: [
-                "rgb(133, 105, 241)",
-                "rgb(164, 101, 241)",
-                "rgb(101, 143, 241)",
-              ],
-              hoverOffset: 4,
-            },
-          ],
-        };
-    
-        // Configuration for the pie chart
-        const configPie = {
-          type: "pie",
-          data: dataPie,
-          options: {},
-        };
-    
-        // Create the chart
-        var chartPie = new Chart(document.getElementById("chartPie"), configPie);
-    
-        // Clean up function to destroy the chart when the component unmounts
-        return () => {
-          chartPie.destroy();
-        };
-      }, []); // Empty dependency array ensures the effect runs only once
-    
-      return (
-        <div className="shadow-lg rounded-lg overflow-hidden">
-          <div className="py-3 px-5 bg-gray-50">Pie chart</div>
-          <canvas className="p-1 ml-40 mr-40" id="chartPie"></canvas>
-        </div>
-      );
+const PieChart = () => {
+  useEffect(() => {
+    const data = {
+      labels: [
+        'Red',
+        'Blue',
+        'Yellow',
+        'Yellow',
+        'Yellow'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [300, 50, 100, 585, 74],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)',
+          'rgb(255, 205, 86)',
+          'rgb(255, 205, 86)'
+        ],
+        hoverOffset: 4
+      }]
     };
-    
-export default piechar
+
+    const config = {
+      type: 'pie',
+      data: data,
+      options: {}
+    };
+
+    var chartPie = new Chart(document.getElementById('chartPie'), config);
+
+    return () => {
+      chartPie.destroy();
+    };
+  }, []);
+
+  return (
+    <div style={{ height: '33rem', paddingBottom: '4rem', textAlign: 'center', display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
+      <div className="shadow-lg rounded-lg overflow-hidden">
+        <div className="py-3 px-5 bg-gray-50">Pie chart</div>
+        <canvas style={{ padding: '1rem', marginLeft: '4rem', marginRight: '4rem', display: 'block', boxSizing: 'border-box', height: '423px', width: '423px' }} id="chartPie" width="423px" height="423px"></canvas>
+      </div>
+    </div>
+  );
+};
+
+export default PieChart;
