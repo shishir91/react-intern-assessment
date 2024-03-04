@@ -9,7 +9,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const [login, setlogin] = useState(false);
 
   useEffect(() => {
     async function authUser() {
@@ -20,8 +19,8 @@ const Login = () => {
           },
         });
         console.log(response.data);
-        if (response.data) {
-          setlogin(true);
+        if (response.data.id) {
+          navigate("/");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,10 +28,6 @@ const Login = () => {
     }
 
     authUser();
-
-    if (login) {
-      navigate("/");
-    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -47,6 +42,7 @@ const Login = () => {
       setEmail(email);
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
+      window.location.reload()
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error);

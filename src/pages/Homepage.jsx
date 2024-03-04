@@ -17,7 +17,6 @@ const Homepage = () => {
   const firstIndex = lastIndex - productsPerPage;
   const npage = Math.ceil(products.length / productsPerPage);
   const navigate = useNavigate();
-  const [login, setlogin] = useState();
 
   useEffect(() => {
     async function authUser() {
@@ -28,12 +27,8 @@ const Homepage = () => {
           },
         });
         console.log(response.data);
-        if (response.data.id) {
-          setlogin("123");
-          console.log(login);
-          if (!login) {
+        if (!response.data.id) {
             navigate("/login");
-          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -42,9 +37,10 @@ const Homepage = () => {
 
     authUser();
 
-    if (!login) {
+    if (!localStorage.getItem("token")) {
       navigate("/login");
     }
+
     const getProducts = async () => {
       try {
         const response = await axios.get(`${API_END_POINT}/products`);

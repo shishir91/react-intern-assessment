@@ -7,7 +7,6 @@ import { API_END_POINT } from "../configs/constants";
 const PieChart = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const navigate = useNavigate();
-  const [login, setlogin] = useState(false);
 
   useEffect(() => {
     async function authUser() {
@@ -18,8 +17,8 @@ const PieChart = () => {
           },
         });
         console.log(response.data);
-        if (response.data) {
-          setlogin(true);
+        if (!response.data.id) {
+            navigate("/login");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -28,7 +27,7 @@ const PieChart = () => {
 
     authUser();
 
-    if (!login) {
+    if (!localStorage.getItem("token")) {
       navigate("/login");
     }
 

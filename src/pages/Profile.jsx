@@ -55,10 +55,6 @@ const Profile = () => {
             </span>
             <br />
             <span>
-              <b>Address:</b> {profile.address.city}
-            </span>
-            <br />
-            <span>
               <b>Date of Birth:</b> {profile.birthDate}
             </span>
             <br />

@@ -24,10 +24,11 @@ const Navbar = () => {
     }
 
     fetchData();
-  }, []);
+  }, [login]);
 
   const logout = () => {
     localStorage.clear();
+    window.location.reload()
     navigate("/login");
   };
   return (
