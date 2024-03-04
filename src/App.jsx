@@ -9,9 +9,8 @@ import {
 import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
 import Explore from "./pages/Explore";
-import { useEffect, useState } from "react";
 import Piechar from "./pages/piechar";
-// import "bootstrap/dist/css/bootstrap.css"
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -20,16 +19,13 @@ function App() {
         <nav className="">
           <Navbar />
         </nav>
-        <main style={{ height: "100vh" }} className="bg-gray-300">
+        <main style={{ height: "100%" }} className="bg-gray-300">
           <Routes>
-            {localStorage.getItem("login") ? (
-              <Route index element={<Homepage />} />
-            ) : (
-              <Route index element={<Login />} />
-            )}
+            <Route index element={<Homepage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/piechart" element={<Piechar />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>
       </Router>

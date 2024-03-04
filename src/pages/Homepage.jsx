@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 
 const Homepage = () => {
-  const [token, setToken] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -18,8 +17,34 @@ const Homepage = () => {
   const firstIndex = lastIndex - productsPerPage;
   const npage = Math.ceil(products.length / productsPerPage);
   const navigate = useNavigate();
+  const [login, setlogin] = useState();
 
   useEffect(() => {
+    async function authUser() {
+      try {
+        const response = await axios.get(`${API_END_POINT}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response.data);
+        if (response.data.id) {
+          setlogin("123");
+          console.log(login);
+          if (!login) {
+            navigate("/login");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    authUser();
+
+    if (!login) {
+      navigate("/login");
+    }
     const getProducts = async () => {
       try {
         const response = await axios.get(`${API_END_POINT}/products`);
@@ -28,7 +53,6 @@ const Homepage = () => {
         );
         if (response && response.data.products && response2) {
           const categoryNames = response2.data;
-          console.log(categoryNames);
           const uniqueCategories = [...new Set(categoryNames)];
           const capitalizedCategories = uniqueCategories.map(
             capitalizeFirstLetter
@@ -52,7 +76,6 @@ const Homepage = () => {
         `${API_END_POINT}/products/search?q=${searchText}`
       );
       if (response.data) {
-        console.log(response.data);
         setProducts(response.data.products);
       } else {
         setProducts(tempProductList);
@@ -63,32 +86,20 @@ const Homepage = () => {
     } else searchBooks();
   }, [searchText]);
 
-  // Function to capitalize the first letter of each word
   const capitalizeFirstLetter = (str) => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  // Function to handle category selection
   const handleCategoryClick = async (category) => {
     const response3 = await axios.get(
       `${API_END_POINT}/products/category/${category}`
     );
-    console.log(response3.data);
     setSelectedCategory(category);
     setProducts(response3.data.products);
   };
 
-  // Filter products based on selected category
-  // const filteredProducts = selectedCategory
-  //   ? selectedCategoryProducts
-  //   : products;
-
-  // console.log(filteredProducts);
-
   const items = products.slice(firstIndex, lastIndex);
   const numbers = [...Array(npage + 1).keys()].slice(1);
-
-  console.log(numbers);
 
   const prePage = () => {
     if (currentPage !== 1) {
@@ -172,7 +183,13 @@ const Homepage = () => {
           </div>
 
           {/* Pagination */}
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "50px",
+            }}
+          >
             <div
               className="isolate inline-flex -space-x-px rounded-md shadow-sm"
               aria-label="Pagination"
@@ -206,7 +223,11 @@ const Homepage = () => {
                     href="#"
                     onClick={() => changeCPage(n)}
                     aria-current="page"
-                    className={`${currentPage === n? 'relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600':'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}`}
+                    className={`${
+                      currentPage === n
+                        ? "relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        : "relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    }`}
                   >
                     {n}
                   </a>

@@ -1,14 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import Chart from 'chart.js/auto';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import Chart from "chart.js/auto";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { API_END_POINT } from "../configs/constants";
 
 const PieChart = () => {
   const [categoriesData, setCategoriesData] = useState([]);
+  const navigate = useNavigate();
+  const [login, setlogin] = useState(false);
 
   useEffect(() => {
+    async function authUser() {
+      try {
+        const response = await axios.get(`${API_END_POINT}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response.data);
+        if (response.data) {
+          setlogin(true);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    authUser();
+
+    if (!login) {
+      navigate("/login");
+    }
+
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dummyjson.com/products?limit=200');
+        const response = await axios.get(
+          "https://dummyjson.com/products?limit=200"
+        );
         const products = response.data.products;
 
         // Count the number of products per category
@@ -18,14 +46,16 @@ const PieChart = () => {
         }, {});
 
         // Convert categoriesCount object into an array of objects
-        const categoriesDataArray = Object.entries(categoriesCount).map(([category, count]) => ({
-          category,
-          count,
-        }));
+        const categoriesDataArray = Object.entries(categoriesCount).map(
+          ([category, count]) => ({
+            category,
+            count,
+          })
+        );
 
         setCategoriesData(categoriesDataArray);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -36,35 +66,37 @@ const PieChart = () => {
     if (!categoriesData.length) return; // Return if no data
 
     // Destroy the previous chart instance if it exists
-    const existingChartInstance = Chart.getChart('chartPie');
+    const existingChartInstance = Chart.getChart("chartPie");
     if (existingChartInstance) {
       existingChartInstance.destroy();
     }
 
     // Render the pie chart using Chart.js
     const renderChart = () => {
-      const ctx = document.getElementById('chartPie').getContext('2d');
+      const ctx = document.getElementById("chartPie").getContext("2d");
 
       const labels = categoriesData.map(({ category }) => category);
       const data = categoriesData.map(({ count }) => count);
 
       const config = {
-        type: 'pie',
+        type: "pie",
         data: {
           labels: labels,
-          datasets: [{
-            label: 'Number of Products per Category',
-            data: data,
-            backgroundColor: [
-              'rgb(255, 99, 132)',
-              'rgb(54, 162, 235)',
-              'rgb(255, 205, 86)',
-              'rgb(75, 192, 192)',
-              'rgb(153, 102, 255)',
-              'rgb(255, 159, 64)',
-            ],
-            hoverOffset: 4,
-          }],
+          datasets: [
+            {
+              label: "Number of Products per Category",
+              data: data,
+              backgroundColor: [
+                "rgb(255, 99, 132)",
+                "rgb(54, 162, 235)",
+                "rgb(255, 205, 86)",
+                "rgb(75, 192, 192)",
+                "rgb(153, 102, 255)",
+                "rgb(255, 159, 64)",
+              ],
+              hoverOffset: 4,
+            },
+          ],
         },
       };
 
@@ -75,10 +107,32 @@ const PieChart = () => {
   }, [categoriesData]); // Trigger the effect when categoriesData changes
 
   return (
-    <div style={{ height: '33rem', paddingBottom: '4rem', textAlign: 'center', display: 'flex', alignContent: 'center', justifyContent: 'center',  }}>
+    <div
+      style={{
+        height: "33rem",
+        paddingBottom: "4rem",
+        textAlign: "center",
+        display: "flex",
+        alignContent: "center",
+        justifyContent: "center",
+      }}
+    >
       <div className="shadow-lg rounded-lg overflow-hidden">
         <div className="py-3 px-5 bg-gray-50">Pie chart</div>
-        <canvas style={{ padding: '1rem', marginLeft: '4rem', marginRight: '4rem', display: 'block', boxSizing: 'border-box', height: '423px', width: '423px' }} id="chartPie" width="423px" height="423px"></canvas>
+        <canvas
+          style={{
+            padding: "1rem",
+            marginLeft: "4rem",
+            marginRight: "4rem",
+            display: "block",
+            boxSizing: "border-box",
+            height: "423px",
+            width: "423px",
+          }}
+          id="chartPie"
+          width="423px"
+          height="423px"
+        ></canvas>
       </div>
     </div>
   );

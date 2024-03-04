@@ -9,10 +9,31 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  if (localStorage.getItem("login")) {
-    navigate("/");
-    return null;
-  }
+  const [login, setlogin] = useState(false);
+
+  useEffect(() => {
+    async function authUser() {
+      try {
+        const response = await axios.get(`${API_END_POINT}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response.data);
+        if (response.data) {
+          setlogin(true);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    authUser();
+
+    if (login) {
+      navigate("/");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,10 +42,11 @@ const Login = () => {
         username,
         password,
       });
+      console.log(response.data);
       const { email, token } = response.data;
-      console.log(response);
       setEmail(email);
-      localStorage.setItem("login", true);
+      localStorage.setItem("token", token);
+      localStorage.setItem("email", email);
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error);

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Explore = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [fullscreenImage, setFullscreenImage] = useState(null);
-  console.log(location);
   if (!location.state || !location.state.product) {
     navigate("/");
     return;
